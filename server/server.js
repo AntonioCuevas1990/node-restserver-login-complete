@@ -1,16 +1,14 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const db = require("./config/mysql.config");
+//const db = require("./config/mysql.config");
+const db = require("./models/index");
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
-
-// usar el controlador
-//app.use(require("./router/user-router"));
 
 db.sequelize
     .query("SET FOREIGN_KEY_CHECKS = 0", { raw: true })
@@ -20,7 +18,8 @@ db.sequelize
         });
     });
 
-require("./router/user-router")(app);
+const userController = require("./controllers/user-controller");
+app.use(userController);
 
 app.listen(process.env.PORT, () => {
     console.log("Escuchando puerto: ", process.env.PORT);

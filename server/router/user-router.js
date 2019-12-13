@@ -1,4 +1,4 @@
-module.exports = function(app) {
+/*module.exports = function(app) {
     const users = require("../controllers/user-controller");
 
     // Create a new User
@@ -15,4 +15,4 @@ module.exports = function(app) {
 
     // Delete a User with Id
     app.delete("/api/usuarios/:userId", users.delete);
-};
+};*/
