@@ -5,7 +5,7 @@ const router = express.Router();
 const User = db.usuarios;
 const clientRedis = require("../models/redis");
 
-/* Register Route
+/* Ruta para registro de nuevo usuario
 ========================================================= */
 router.post("/register", async(req, res) => {
     try {
@@ -34,7 +34,7 @@ router.post("/register", async(req, res) => {
     }
 });
 
-/* Login Route
+/* Ruta para el login
 ========================================================= */
 router.post("/login", async(req, res) => {
     let body = req.body;
@@ -42,14 +42,11 @@ router.post("/login", async(req, res) => {
     let password = req.body.password;
     const user = await User.findOne({ where: { username } });
 
-    // if the username / password is missing, we use status code 400
-    // indicating a bad request was made and send back a message
     if (!username || !password) {
         return res.status(400).send("Request missing username or password param");
     }
 
     try {
-        // we will cover the user authenticate method in the next section
         if (bcrypt.compareSync(password, user.password)) {
             return res.json({
                 ok: true,
@@ -64,83 +61,5 @@ router.post("/login", async(req, res) => {
         });
     }
 });
-
-// Post a User
-/*exports.create = (req, res) => {
-            // Save to MySQL database
-            User.create({
-                    username: req.body.username,
-                    email: req.body.email,
-                    password: bcrypt.hashSync(req.body.password, 10)
-                })
-                .then(user => {
-                    // Send created User to client
-                    //user.password = null;
-                    res.json({
-                        ok: true,
-                        user
-                    });
-                })
-                .catch(err => {
-                    return res.status(400).send(err);
-                    err;
-                });
-        };*/
-
-// FETCH all Customers
-/*exports.findAll = (req, res) => {
-            User.findAll().then(user => {
-                // Send all customers to Client
-                res.send(user);
-            });
-        };*/
-
-// Find a Customer by Id
-/*exports.findByPk = (req, res) => {
-            User.findByPk(req.params.userId).then(user => {
-                res.send(user);
-            });
-        };*/
-
-// Update a Customer
-/*exports.update = (req, res) => {
-            const id = req.params.userId;
-            User.update({
-                username: req.body.username,
-                email: req.body.email,
-                password: bcrypt.hashSync(req.body.password, 10)
-            }, {
-                where: { id: req.params.userId }
-            }).then(() => {
-                res.status(200).send("updated successfully a user with id = " + id);
-            });
-        };*/
-
-// Delete a Customer by Id
-/*exports.delete = (req, res) => {
-            const id = req.params.userId;
-            User.destroy({
-                where: { id: id }
-            }).then(() => {
-                res.status(200).send("deleted successfully a customer with id = " + id);
-            });
-        };*/
-
-/*exports.login = (req, res) => {
-            const { username, password } = req.body;
-
-            // if the username / password is missing, we use status code 400
-            if (!username || !password) {
-                return res.status(400).send("Request missing username or password param");
-            }
-
-            try {
-                let user = User.authenticate(username, password);
-                user = user.authorize();
-                return res.json(user);
-            } catch (err) {
-                return res.status(400).send("invalid username or password");
-            }
-        };*/
 
 module.exports = router;
