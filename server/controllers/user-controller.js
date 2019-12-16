@@ -1,9 +1,9 @@
 const express = require("express");
-//const db = require("../config/mysql.config");
 const db = require("../models/index");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const User = db.usuarios;
+const clientRedis = require("../models/redis");
 
 /* Register Route
 ========================================================= */
@@ -16,6 +16,13 @@ router.post("/register", async(req, res) => {
         });
 
         let data = await user.authorize();
+
+        let id = data.authToken.dataValues.id;
+        let token = data.authToken.dataValues.token;
+
+        clientRedis.hset(token, id, JSON.stringify(data));
+
+        // En la variable data se encuentra toda la información del Usuario
 
         return res.json({
             ok: true,

@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         }
 
         let token = "";
-
         const possibleCharacters =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -25,7 +24,6 @@ module.exports = (sequelize, DataTypes) => {
                 Math.floor(Math.random() * possibleCharacters.length)
             );
         }
-        console.log(token);
 
         return AuthToken.create({ token, UserId });
     };
